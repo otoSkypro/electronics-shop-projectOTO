@@ -19,11 +19,13 @@ class Item:
         self.quantity = self.string_to_number(quantity)
         self.all_instances.append(self)
 
+
     def __repr__(self, ) -> str:
         return f'Item(name={self.name}, price={self.price}, quantity={self.quantity})'
 
     def __str__(self) -> str:
         return f'{self.name}'
+
 
 
     @property
