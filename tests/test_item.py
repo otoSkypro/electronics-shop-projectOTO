@@ -16,10 +16,7 @@ def test_item_init(item1):
         assert item1.price == 10000
         assert item1.quantity == 20
 
-def test_item_init(item1):
-    assert item1.name == "Смартфон"
-    assert item1.price == 10000
-    assert item1.quantity == 20
+
 
 
 def test_item_calculate_total_price(item1):
