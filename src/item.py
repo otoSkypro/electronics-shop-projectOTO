@@ -1,4 +1,5 @@
 import csv
+import os
 
 
 class Item:
@@ -8,23 +9,15 @@ class Item:
         :param price: Цена за единицу товара.
         :param quantity: Количество товара в магазине.
         """
+    pay_rate = 0.85
+    all_instances = []
 
-    Item.all.append(self)
-    self.__name = name
-    self.price = price
-    self.quantity = quantity
-
-    @staticmethod
-    def string_to_number(str_number):
-        return int(float(str_number))
-
-
-    @classmethod
-    def instantiate_from_csv(cls):
-        with open('../src/items.csv', newline='', encoding='UTF-8') as file:
-            data = csv.DictReader(file)
-            for row in data:
-                cls(row['name'], row['price'], row['quantity'])
+    def __init__(self, name, price, quantity):
+        self.__name = None
+        self.name = name
+        self.price = price
+        self.quantity = self.string_to_number(quantity)
+        self.all_instances.append(self)
 
     @property
     def name(self):
@@ -36,6 +29,27 @@ class Item:
             self.__name = new_name
         else:
             self.__name = new_name[:10]
+
+    @staticmethod
+    def string_to_number(str_number):
+        return int(float(str_number))
+
+
+    @classmethod
+    def instantiate_from_csv(cls):
+        current_dir = os.path.dirname(__file__)
+        items_csv_path = os.path.join(current_dir, 'items.csv')
+
+        with open(items_csv_path, newline='', encoding='UTF-8') as file:
+            data = csv.DictReader(file)
+            for row in data:
+                cls(row['name'], row['price'], row['quantity'])
+
+
+
+
+
+
 
     def calculate_total_price(self) -> float:
         """
