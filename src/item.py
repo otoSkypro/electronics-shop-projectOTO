@@ -1,6 +1,8 @@
 import csv
 import os
 
+from src.phone import Phone
+
 
 class Item:
     """
@@ -12,21 +14,27 @@ class Item:
     pay_rate = 0.85
     all_instances = []
 
-    def __init__(self, name, price, quantity):
+    def __init__(self, name, price, quantity, number_of_sim):
+        self.sim = number_of_sim
         self.__name = None
         self.name = name
         self.price = price
         self.quantity = self.string_to_number(quantity)
         self.all_instances.append(self)
 
-
     def __repr__(self, ) -> str:
-        return f'Item(name={self.name}, price={self.price}, quantity={self.quantity})'
+        return f"{self.__class__.__name__}(name='{self.name}', price={self.price}, quantity={self.quantity})"
 
     def __str__(self) -> str:
         return f'{self.name}'
 
-
+    def __add__(self, other):
+        """Позволяет сложить экземпляры класса Phone или Item по количеству товара в магазине"""
+        if isinstance(other, Item):
+            return self.quantity + other.quantity
+        elif isinstance(other, Phone):
+            return self.quantity
+        raise TypeError("Unsupported operand type(s) for +: {} and {}".format(type(self), type(other)))
 
     @property
     def name(self):
@@ -43,7 +51,6 @@ class Item:
     def string_to_number(str_number):
         return int(float(str_number))
 
-
     @classmethod
     def instantiate_from_csv(cls):
         current_dir = os.path.dirname(__file__)
@@ -53,12 +60,6 @@ class Item:
             data = csv.DictReader(file)
             for row in data:
                 cls(row['name'], row['price'], row['quantity'])
-
-
-
-
-
-
 
     def calculate_total_price(self) -> float:
         """
